@@ -181,8 +181,8 @@ else {
 
     document.getElementById('clickMe').addEventListener('click',()=> {
       for(let i = 0; i< Math.random() * 10; i++) {
-        createConfetti(Math.random() * canvas.width, Math.random() * 10, 120)})
-    }
+        createConfetti(Math.random() * canvas.width, Math.random() * 10, 120)}
+    })
 
     window.addEventListener("resize", () => {
       canvas.width = window.innerWidth;
