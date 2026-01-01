@@ -96,11 +96,15 @@ const params = new URLSearchParams(window.location.search);
 const name = params.get("name");
 const color = params.get("color");
 const age = params.get("age");
+const color2 = params.get("color2");
 
 const defaultColor = "linear-gradient(135deg, #00ff9f, #00ffaf);"
 const display = document.getElementById("nameAge");
 
-if (name && age && color) {
+if (name && age && color && color2) {
+  display.textContent = `${name} is turning ${age}!`;
+  document.body.style.background = `linear-gradient(to bottom, ${color},${color2});`
+} else if (name && age && color) {
   display.textContent = `${name} is turning ${age}!`;
   document.body.style.background = color
 } else if (name && color) {
