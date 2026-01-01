@@ -80,8 +80,8 @@
 <body>
 
   <div class="card" id="clickMe">
-    <h1> Happy Birthday!!! </h1>
-    <h2 id="nameAge"></h2>
+    <h1 id="nameAge"> Happy Birthday!!! </h1>
+    
     
     
   
@@ -102,20 +102,20 @@ const defaultColor = "linear-gradient(135deg, #00ff9f, #00ffaf)"
 const display = document.getElementById("nameAge");
 
 if (name && color && color2) {
-  display.textContent = `${name}`;
+  display.textContent = `Happy Birthday, ${name}!!!`;
   document.body.style.background = `linear-gradient(135deg, #${color},#${color2})`
 } else if (name && color) {
-  display.textContent = `${name}`;
+  display.textContent = `Happy Birthday, ${name}!!!`;
   document.body.style.background = color
 } else if (name && color) {
-  display.textContent = name;
+  display.textContent = `Happy Birthday, ${name}!!!`;
   document.body.style.background = color
 } else if (name) {
-  display.textContent = name;
+  display.textContent = `Happy Birthday, ${name}!!!`;
   document.body.style.background = defaultColor
 }
 else {
-  display.textContent = "";
+  display.textContent = "Happy Birthday!!!";
   document.body.style.background = defaultColor
 }
 
