@@ -178,6 +178,9 @@ else {
       createConfetti(e.clientX, e.clientY, 120);
     });
 
+    document.getElementById('clickMe').addEventListener('click',()=> {
+      createConfetti(Math.random() * canvas.width, Math.random() * 100, 120)})
+
     window.addEventListener("resize", () => {
       canvas.width = window.innerWidth;
       canvas.height = window.innerHeight;
