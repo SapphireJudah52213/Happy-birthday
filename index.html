@@ -19,7 +19,6 @@
 
     body {
       height: 100vh;
-      background: linear-gradient(135deg, #00ff9f, #00ffaf);
       display: flex;
       align-items: center;
       justify-content: center;
@@ -95,16 +94,25 @@
     /* -------- NAME & AGE FROM URL -------- */
 const params = new URLSearchParams(window.location.search);
 const name = params.get("name");
+const color = params.get("color");
 const age = params.get("age");
 
+const defaultColor = "linear-gradient(135deg, #00ff9f, #00ffaf);"
 const display = document.getElementById("nameAge");
 
-if (name && age) {
+if (name && age && color) {
   display.textContent = `${name} is turning ${age}!`;
+  document.body.style.background = color
+} else if (name && color) {
+  display.textContent = name;
+  document.body.style.background = color
 } else if (name) {
   display.textContent = name;
-} else {
-  display.textContent = "Celebration Time!";
+  document.body.style.background = defaultColor
+}
+else {
+  display.textContent = "";
+  document.body.style.background = defaultColor
 }
 
     /* -------- CONFETTI -------- */
@@ -162,7 +170,7 @@ if (name && age) {
     animate();
 
     /* -------- CLICK CONFETTI -------- */
-    document.getElementById("clickMe").addEventListener("click", e => {
+    document.body.addEventListener("click", e => {
       createConfetti(e.clientX, e.clientY, 120);
     });
 
