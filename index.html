@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Happy Birthday</title>
+  <title id="title">Happy Birthday</title>
 
   <!-- Open Graph (for sharing preview) -->
   <meta property="og:title" content="Happy Birthday!" />
@@ -98,6 +98,7 @@ const color = params.get("color");
 const age = params.get("age");
 const color2 = params.get("colortwo");
 
+    document.getElementById("title").textContent = `Happy Birthday, ${name}!`
 const defaultColor = "linear-gradient(135deg, #00ff9f, #00ffaf)"
 const display = document.getElementById("nameAge");
 
@@ -179,7 +180,9 @@ else {
     });
 
     document.getElementById('clickMe').addEventListener('click',()=> {
-      createConfetti(Math.random() * canvas.width, Math.random() * 100, 120)})
+      for(let i = 0; i< Math.random() * 10; i++) {
+        createConfetti(Math.random() * canvas.width, Math.random() * 10, 120)})
+    }
 
     window.addEventListener("resize", () => {
       canvas.width = window.innerWidth;
