@@ -41,32 +41,38 @@
       text-shadow: 0 4px 15px rgba(0,0,0,0.3);
     }
 
-    h2 {
-      margin-top: 10px;
-      font-size: 3rem;
+    /* Info button */
+    .info-btn {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      width: 36px;
+      height: 36px;
       color: white;
-    }
-
-    p {
-      margin-top: 20px;
-      font-size: 1.3rem;
-      color: white;
-    }
-
-    button {
-      margin-top: 25px;
-      padding: 12px 26px;
-      border-radius: 30px;
-      border: none;
-      background: white;
-      font-size: 1rem;
-      font-weight: bold;
       cursor: pointer;
-      transition: transform 0.2s;
+      z-index: 5;
+      opacity: 0.9;
     }
 
-    button:hover {
-      transform: scale(1.05);
+    .info-btn:hover {
+      opacity: 1;
+    }
+
+    /* Info popup */
+    .info-box {
+      position: fixed;
+      top: 70px;
+      right: 20px;
+      background: rgba(0, 0, 0, 0.65);
+      backdrop-filter: blur(8px);
+      color: white;
+      padding: 14px 18px;
+      border-radius: 12px;
+      font-size: 0.95rem;
+      max-width: 240px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+      z-index: 5;
+      display: none;
     }
 
     canvas {
@@ -79,72 +85,52 @@
 </head>
 <body>
 
+  <!-- Info Button -->
+  <div class="info-btn" id="infoBtn">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+      <path fill-rule="evenodd" d="
+        M12 2
+        A10 10 0 1 1 12 22
+        A10 10 0 1 1 12 2
+        M11 10 H13 V17 H11 V10
+        M11 6 H13 V8 H11 V6
+      " />
+    </svg>
+  </div>
+
+  <!-- Info Popup -->
+  <div class="info-box" id="infoBox">
+    Click the screen to generate more confetti
+  </div>
+
   <div class="card" id="clickMe">
-    <h1 id="nameAge"> Happy Birthday!!! </h1>
-    <div id="info">
-      <svg
-  xmlns="http://www.w3.org/2000/svg"
-  width="64"
-  height="64"
-  viewBox="0 0 24 24"
-  fill="currentColor"
->
-  <path
-    fill-rule="evenodd"
-    d="
-      M12 2
-      A10 10 0 1 1 12 22
-      A10 10 0 1 1 12 2
-
-      M11 10
-      H13
-      V17
-      H11
-      V10
-
-      M11 6
-      H13
-      V8
-      H11
-      V6
-    "
-  />
-</svg>
-    </div>
-    
-    
-  
+    <h1 id="nameAge">Happy Birthday!!!</h1>
   </div>
 
   <canvas id="confetti"></canvas>
 
   <script>
-    /* -------- NAME & AGE -------- */
-    /* -------- NAME & AGE FROM URL -------- */
-const params = new URLSearchParams(window.location.search);
-const name = params.get("name");
-const color = params.get("color");
-const color2 = params.get("colortwo");
+    /* -------- NAME FROM URL -------- */
+    const params = new URLSearchParams(window.location.search);
+    const name = params.get("name");
+    const color = params.get("color");
+    const color2 = params.get("colortwo");
 
-  
-const defaultColor = "linear-gradient(135deg, #00ff9f, #00ffaf)"
-const display = document.getElementById("nameAge");
+    const defaultColor = "linear-gradient(135deg, #00ff9f, #00ffaf)";
+    const display = document.getElementById("nameAge");
 
-if (name && color && color2) {
-  display.textContent = `Happy Birthday, ${name}!!!`;
-  document.body.style.background = `linear-gradient(135deg, #${color},#${color2})`
-} else if (name && color) {
-  display.textContent = `Happy Birthday, ${name}!!!`;
-  document.body.style.background = "#" + color
-} 
- else if (name) {
-  display.textContent = `Happy Birthday, ${name}!!!`;
-  document.body.style.background = defaultColor
-}
-else {
-  display.textContent = "Happy Birthday!!!";
-  document.body.style.background = defaultColor
-}
+    if (name && color && color2) {
+      display.textContent = `Happy Birthday, ${name}!!!`;
+      document.body.style.background = `linear-gradient(135deg, #${color}, #${color2})`;
+    } else if (name && color) {
+      display.textContent = `Happy Birthday, ${name}!!!`;
+      document.body.style.background = "#" + color;
+    } else if (name) {
+      display.textContent = `Happy Birthday, ${name}!!!`;
+      document.body.style.background = defaultColor;
+    } else {
+      document.body.style.background = defaultColor;
+    }
 
     /* -------- CONFETTI -------- */
     const canvas = document.getElementById("confetti");
@@ -171,7 +157,6 @@ else {
       }
     }
 
-    // Initial rain
     for (let i = 0; i < 150; i++) {
       createConfetti(Math.random() * canvas.width, Math.random() * canvas.height);
     }
@@ -184,7 +169,7 @@ else {
         ctx.translate(p.x, p.y);
         ctx.rotate(p.rotation * Math.PI / 180);
         ctx.fillStyle = p.color;
-        ctx.fillRect(-p.size/2, -p.size/2, p.size, p.size);
+        ctx.fillRect(-p.size / 2, -p.size / 2, p.size, p.size);
         ctx.restore();
 
         p.x += p.speedX;
@@ -200,15 +185,29 @@ else {
 
     animate();
 
-    /* -------- CLICK CONFETTI -------- */
     document.body.addEventListener("click", e => {
       createConfetti(e.clientX, e.clientY, 120);
     });
 
-    document.getElementById('clickMe').addEventListener('click',()=> {
-      for(let i = 0; i< Math.random() * 10; i++) {
-        createConfetti(Math.random() * canvas.width, Math.random() * 10, 120)}
-    })
+    document.getElementById("clickMe").addEventListener("click", () => {
+      for (let i = 0; i < Math.random() * 10; i++) {
+        createConfetti(Math.random() * canvas.width, Math.random() * 10, 120);
+      }
+    });
+
+    /* -------- INFO TOGGLE -------- */
+    const infoBtn = document.getElementById("infoBtn");
+    const infoBox = document.getElementById("infoBox");
+
+    infoBtn.addEventListener("click", (e) => {
+      e.stopPropagation();
+      infoBox.style.display =
+        infoBox.style.display === "block" ? "none" : "block";
+    });
+
+    document.body.addEventListener("click", () => {
+      infoBox.style.display = "none";
+    });
 
     window.addEventListener("resize", () => {
       canvas.width = window.innerWidth;
