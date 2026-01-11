@@ -119,6 +119,13 @@
     const defaultColor = "linear-gradient(135deg, #00ff9f, #00ffaf)";
     const display = document.getElementById("nameAge");
 
+    if (color === 'rainbow') {
+      if (name) {
+        display.textContent = `Happy Birthday, ${name}!!!`;
+        document.body.style.background = `linear-gradient(135deg, red, orange, yellow,green, blue, purple)`;
+      }
+    }
+    else {
     if (name && color && color2) {
       display.textContent = `Happy Birthday, ${name}!!!`;
       document.body.style.background = `linear-gradient(135deg, #${color}, #${color2})`;
@@ -130,6 +137,7 @@
       document.body.style.background = defaultColor;
     } else {
       document.body.style.background = defaultColor;
+    }
     }
 
     /* -------- CONFETTI -------- */
