@@ -154,7 +154,9 @@
 
     function createConfetti(x, y, amount = 80) {
       for (let i = 0; i < amount; i++) {
+        let name = "confetti" + i;
         confetti.push({
+          name,
           x,
           y,
           size: Math.random() * 6 + 4,
@@ -190,9 +192,9 @@
         p.rotation += 5;
 
         if (p.y > canvas.height) confetti.splice(index, 1);
-        if (isTouching(this, cake)) {
+        /*if (isTouching(this, cake)) {
           this.gravity = 0;
-        }
+        }*/
       });
 
       requestAnimationFrame(animate);
