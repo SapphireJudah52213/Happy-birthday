@@ -221,6 +221,17 @@
       canvas.width = window.innerWidth;
       canvas.height = window.innerHeight;
     });
+    let counter = 0;
+
+    setInterval(()=>{
+      if (color === 'rainbow') {
+        document.body.style.background = `linear-gradient(${counter}deg, red, orange, yellow,green, blue, purple)`;
+      }
+      counter ++
+      if (counter > 365) {
+        counter = 0;
+      }
+    },5);
   </script>
 
 </body>
