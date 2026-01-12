@@ -227,6 +227,9 @@
       if (color === 'rainbow') {
         document.body.style.background = `linear-gradient(${counter}deg, red, orange, yellow,green, blue, purple)`;
       }
+      else if (color && color2) {
+        document.body.style.background = `linear-gradient(${counter}deg, #${color}, #${color2})`;
+      }
       counter ++
       if (counter > 365) {
         counter = 0;
