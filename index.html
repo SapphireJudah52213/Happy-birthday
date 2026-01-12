@@ -98,6 +98,8 @@
     </svg>
   </div>
 
+  <div style="height:100px; width:100px; background:red;" id="cake">Hello</div>
+
   <!-- Info Popup -->
   <div class="info-box" id="infoBox">
     Click the screen to generate more confetti
@@ -169,6 +171,8 @@
       createConfetti(Math.random() * canvas.width, Math.random() * canvas.height);
     }
 
+    let cake = document.getElementById('cake')
+
     function animate() {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
 
@@ -186,6 +190,9 @@
         p.rotation += 5;
 
         if (p.y > canvas.height) confetti.splice(index, 1);
+        if (isTouching(this, cake)) {
+          this.gravity = 0;
+        }
       });
 
       requestAnimationFrame(animate);
@@ -202,6 +209,23 @@
         createConfetti(Math.random() * canvas.width, Math.random() * 10, 120);
       }
     });
+
+    function isTouching(element1, element2) {
+    // Get the bounding boxes of the elements
+    const rect1 = element1.getBoundingClientRect();
+    const rect2 = element2.getBoundingClientRect();
+
+    // Check if the boxes overlap
+    // They are NOT touching if one is entirely to the left, right, above, or below the other.
+    const overlap = !(
+        rect1.right < rect2.left ||
+        rect1.left > rect2.right ||
+        rect1.bottom < rect2.top ||
+        rect1.top > rect2.bottom
+    );
+
+    return overlap;
+}
 
     /* -------- INFO TOGGLE -------- */
     const infoBtn = document.getElementById("infoBtn");
