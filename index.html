@@ -1,114 +1,117 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<title>Happy Birthday</title>
+  <meta charset="UTF-8" />
+  <title>Happy Birthday</title>
 
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<meta property="og:title" content="Happy Birthday!" />
-<meta property="og:description" content="A joyful birthday celebration!" />
-<meta property="og:type" content="website" />
+  <!-- Open Graph (for sharing preview) -->
+  <meta property="og:title" content="Happy Birthday!" />
+  <meta property="og:description" content="A joyful birthday celebration!" />
+  <meta property="og:type" content="website" />
 
-<style>
-  * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: "Segoe UI", Arial, sans-serif;
-  }
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: "Segoe UI", Arial, sans-serif;
+    }
 
-  html, body {
-    height: 100%;
-    width: 100%;
-    overflow: hidden;
-    touch-action: manipulation;
-  }
+    body {
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
 
-  body {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
+    .card {
+      background: rgba(255, 255, 255, 0.15);
+      backdrop-filter: blur(10px);
+      border-radius: 20px;
+      padding: 50px 60px;
+      text-align: center;
+      box-shadow: 0 20px 50px rgba(0,0,0,0.25);
+      z-index: 2;
+    }
 
-  .card {
-    background: rgba(255, 255, 255, 0.15);
-    backdrop-filter: blur(10px);
-    border-radius: 20px;
-    padding: clamp(24px, 6vw, 60px);
-    text-align: center;
-    box-shadow: 0 20px 50px rgba(0,0,0,0.25);
-    z-index: 2;
-    max-width: 90vw;
-  }
+    h1 {
+      font-size: 4rem;
+      color: white;
+      text-shadow: 0 4px 15px rgba(0,0,0,0.3);
+    }
 
-  h1 {
-    font-size: clamp(2rem, 8vw, 4rem);
-    color: white;
-    text-shadow: 0 4px 15px rgba(0,0,0,0.3);
-    word-wrap: break-word;
-  }
+    /* Info button */
+    .info-btn {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      width: 56px;
+      height: 56px;
+      color: white;
+      cursor: pointer;
+      z-index: 5;
+      opacity: 0.9;
+    }
 
-  .info-btn {
-    position: fixed;
-    top: clamp(8px, 3vw, 20px);
-    right: clamp(8px, 3vw, 20px);
-    width: clamp(42px, 10vw, 56px);
-    height: clamp(42px, 10vw, 56px);
-    color: white;
-    cursor: pointer;
-    z-index: 5;
-    opacity: 0.9;
-  }
+    .info-btn:hover {
+      opacity: 1;
+    }
 
-  .info-btn:hover {
-    opacity: 1;
-  }
+    /* Info popup */
+    .info-box {
+      position: absolute;
+      top: 70px;
+      right: 20px;
+      background: rgba(0, 0, 0, 0.65);
+      backdrop-filter: blur(8px);
+      color: white;
+      padding: 14px 18px;
+      border-radius: 12px;
+      font-size: 3rem;
+      max-width: 240px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+      z-index: 5;
+      display: none;
+    }
 
-  .info-box {
-    position: absolute;
-    top: clamp(60px, 18vw, 70px);
-    right: clamp(8px, 3vw, 20px);
-    background: rgba(0, 0, 0, 0.65);
-    backdrop-filter: blur(8px);
-    color: white;
-    padding: clamp(8px, 2vw, 14px) clamp(10px, 3vw, 18px);
-    border-radius: 12px;
-    font-size: clamp(0.9rem, 4vw, 1.25rem);
-    max-width: 240px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-    z-index: 5;
-    display: none;
-  }
-
-  canvas {
-    position: fixed;
-    top: 0;
-    left: 0;
-    pointer-events: none;
-    width: 100vw;
-    height: 100vh;
-  }
-</style>
+    canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      pointer-events: none;
+    }
+  </style>
 </head>
-
 <body>
 
-<div class="info-btn" id="infoBtn">
-  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
-    <path fill-rule="evenodd"
-      d="M12 2A10 10 0 1 1 12 22A10 10 0 1 1 12 2M11 10H13V17H11V10M11 6H13V8H11V6" />
-  </svg>
-</div>
+  <!-- Info Button -->
+  <div class="info-btn" id="infoBtn">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+      <path fill-rule="evenodd" d="
+        M12 2
+        A10 10 0 1 1 12 22
+        A10 10 0 1 1 12 2
+        M11 10 H13 V17 H11 V10
+        M11 6 H13 V8 H11 V6
+      " />
+    </svg>
+  </div>
 
-<div class="info-box" id="infoBox">Click to generate confetti</div>
+  
 
-<div class="card" id="clickMe">
-  <h1 id="nameAge">Happy Birthday!!!</h1>
-</div>
+  <!-- Info Popup -->
+  <div class="info-box" id="infoBox">
+    Click the screen to generate more confetti
+  </div>
 
-<canvas id="confetti"></canvas>
+  <div class="card" id="clickMe">
+    <h1 id="nameAge">Happy Birthday!!!</h1>
+  </div>
 
-<script>
+  <canvas id="confetti"></canvas>
+
+  <script>
 /* -------- NAME FROM URL -------- */
 const params = new URLSearchParams(window.location.search);
 const name = params.get("name");
