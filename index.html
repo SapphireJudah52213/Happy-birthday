@@ -112,156 +112,162 @@
   <canvas id="confetti"></canvas>
 
   <script>
-    /* -------- NAME FROM URL -------- */
-    const params = new URLSearchParams(window.location.search);
-    const name = params.get("name");
-    const color = params.get("color");
-    const color2 = params.get("colortwo");
+/* -------- NAME FROM URL -------- */
+const params = new URLSearchParams(window.location.search);
+const name = params.get("name");
+const color = params.get("color");
+const color2 = params.get("colortwo");
 
-    const defaultColor = "linear-gradient(135deg, #00ff9f, #00ffaf)";
-    const display = document.getElementById("nameAge");
+const defaultColor = "linear-gradient(135deg, #00ff9f, #00ffaf)";
+const display = document.getElementById("nameAge");
 
-    if (color === 'rainbow') {
-      if (name) {
-        display.textContent = `Happy Birthday, ${name}!!!`;
-        document.body.style.background = `linear-gradient(135deg, red, orange, yellow,green, blue, purple)`;
-      }
-    }
-    else {
-    if (name && color && color2) {
-      display.textContent = `Happy Birthday, ${name}!!!`;
-      document.body.style.background = `linear-gradient(135deg, #${color}, #${color2})`;
-    } else if (name && color) {
-      display.textContent = `Happy Birthday, ${name}!!!`;
-      document.body.style.background = "#" + color;
-    } else if (name) {
-      display.textContent = `Happy Birthday, ${name}!!!`;
-      document.body.style.background = defaultColor;
-    } else {
-      document.body.style.background = defaultColor;
-    }
-    }
-
-    /* -------- CONFETTI -------- */
-    const canvas = document.getElementById("confetti");
-    const ctx = canvas.getContext("2d");
-
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
-
-    const colors = ["#ff3b3b", "#ffd93b", "#3bff6f", "#3b7bff", "#d93bff"];
-    let confetti = [];
-
-    function createConfetti(x, y, amount = 80) {
-      for (let i = 0; i < amount; i++) {
-        let name = "confetti" + i;
-        confetti.push({
-          name,
-          x,
-          y,
-          size: Math.random() * 6 + 4,
-          speedX: (Math.random() - 0.5) * 8,
-          speedY: Math.random() * -8 - 3,
-          color: colors[Math.floor(Math.random() * colors.length)],
-          rotation: Math.random() * 360,
-          gravity: 0.3
-        });
-      }
-    }
-
-    for (let i = 0; i < 150; i++) {
-      createConfetti(Math.random() * canvas.width, Math.random() * canvas.height);
-    }
-
-    let cake = document.getElementById('cake')
-
-    function animate() {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-      confetti.forEach((p, index) => {
-        ctx.save();
-        ctx.translate(p.x, p.y);
-        ctx.rotate(p.rotation * Math.PI / 180);
-        ctx.fillStyle = p.color;
-        ctx.fillRect(-p.size / 2, -p.size / 2, p.size, p.size);
-        ctx.restore();
-
-        p.x += p.speedX;
-        p.y += p.speedY;
-        p.speedY += p.gravity;
-        p.rotation += 5;
-
-        if (p.y > canvas.height) confetti.splice(index, 1);
-        /*if (isTouching(this, cake)) {
-          this.gravity = 0;
-        }*/
-      });
-
-      requestAnimationFrame(animate);
-    }
-
-    animate();
-
-    document.body.addEventListener("click", e => {
-      createConfetti(e.clientX, e.clientY, 120);
-    });
-
-    document.getElementById("clickMe").addEventListener("click", () => {
-      for (let i = 0; i < Math.random() * 20 + 10; i++) {
-        createConfetti(Math.random() * canvas.width, Math.random() * 10, 120);
-      }
-    });
-
-    function isTouching(element1, element2) {
-    // Get the bounding boxes of the elements
-    const rect1 = element1.getBoundingClientRect();
-    const rect2 = element2.getBoundingClientRect();
-
-    // Check if the boxes overlap
-    // They are NOT touching if one is entirely to the left, right, above, or below the other.
-    const overlap = !(
-        rect1.right < rect2.left ||
-        rect1.left > rect2.right ||
-        rect1.bottom < rect2.top ||
-        rect1.top > rect2.bottom
-    );
-
-    return overlap;
+if (color === 'rainbow') {
+  if (name) {
+    display.textContent = `Happy Birthday, ${name}!!!`;
+    document.body.style.background =
+      `linear-gradient(135deg, red, orange, yellow,green, blue, purple)`;
+  }
+} else {
+  if (name && color && color2) {
+    display.textContent = `Happy Birthday, ${name}!!!`;
+    document.body.style.background = `linear-gradient(135deg, #${color}, #${color2})`;
+  } else if (name && color) {
+    display.textContent = `Happy Birthday, ${name}!!!`;
+    document.body.style.background = "#" + color;
+  } else if (name) {
+    display.textContent = `Happy Birthday, ${name}!!!`;
+    document.body.style.background = defaultColor;
+  } else {
+    document.body.style.background = defaultColor;
+  }
 }
 
-    /* -------- INFO TOGGLE -------- */
-    const infoBtn = document.getElementById("infoBtn");
-    const infoBox = document.getElementById("infoBox");
+/* -------- CONFETTI -------- */
+const canvas = document.getElementById("confetti");
+const ctx = canvas.getContext("2d");
 
-    infoBtn.addEventListener("click", (e) => {
-      e.stopPropagation();
-      infoBox.style.display =
-        infoBox.style.display === "block" ? "none" : "block";
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+
+const colors = ["#ff3b3b", "#ffd93b", "#3bff6f", "#3b7bff", "#d93bff"];
+let confetti = [];
+let landed = [];
+
+const cakeHeight = 80;
+
+/* Make a cake platform */
+function drawCake() {
+  ctx.fillStyle = "#442200";
+  ctx.fillRect(0, canvas.height - cakeHeight, canvas.width, cakeHeight);
+
+  ctx.fillStyle = "#ffb6c1";
+  ctx.fillRect(0, canvas.height - cakeHeight + 10, canvas.width, 10);
+}
+
+/* Create falling pieces */
+function createConfetti(x, y, amount = 80) {
+  for (let i = 0; i < amount; i++) {
+    confetti.push({
+      x,
+      y,
+      size: Math.random() * 6 + 4,
+      speedX: (Math.random() - 0.5) * 8,
+      speedY: Math.random() * -8 - 3,
+      color: colors[Math.floor(Math.random() * colors.length)],
+      rotation: Math.random() * 360,
+      gravity: 0.3
     });
+  }
+}
 
-    document.body.addEventListener("click", () => {
-      infoBox.style.display = "none";
-    });
+for (let i = 0; i < 150; i++) {
+  createConfetti(Math.random() * canvas.width, Math.random() * canvas.height);
+}
 
-    window.addEventListener("resize", () => {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
-    });
-    let counter = 0;
+function animate() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-    setInterval(()=>{
-      if (color === 'rainbow') {
-        document.body.style.background = `linear-gradient(${counter}deg, red, orange, yellow,green, blue, purple)`;
-      }
-      else if (color && color2) {
-        document.body.style.background = `linear-gradient(${counter}deg, #${color}, #${color2})`;
-      }
-      counter ++
-      if (counter > 365) {
-        counter = 0;
-      }
-    },30);
-  </script>
+  drawCake();
+
+  confetti.forEach((p, index) => {
+    ctx.save();
+    ctx.translate(p.x, p.y);
+    ctx.rotate(p.rotation * Math.PI / 180);
+    ctx.fillStyle = p.color;
+    ctx.fillRect(-p.size / 2, -p.size / 2, p.size, p.size);
+    ctx.restore();
+
+    p.x += p.speedX;
+    p.y += p.speedY;
+    p.speedY += p.gravity;
+    p.rotation += 5;
+
+    if (p.y + p.size / 2 >= canvas.height - cakeHeight) {
+      landed.push({ ...p, born: Date.now() });
+      confetti.splice(index, 1);
+    } else if (p.y > canvas.height) {
+      confetti.splice(index, 1);
+    }
+  });
+
+  landed.forEach((p, index) => {
+    ctx.save();
+    ctx.translate(p.x, p.y);
+    ctx.rotate(p.rotation * Math.PI / 180);
+    ctx.fillStyle = p.color;
+    ctx.fillRect(-p.size / 2, -p.size / 2, p.size, p.size);
+    ctx.restore();
+
+    if (Date.now() - p.born > 2000) landed.splice(index, 1);
+  });
+
+  requestAnimationFrame(animate);
+}
+
+animate();
+
+document.body.addEventListener("click", e => {
+  createConfetti(e.clientX, e.clientY, 120);
+});
+
+document.getElementById("clickMe").addEventListener("click", () => {
+  for (let i = 0; i < Math.random() * 20 + 10; i++) {
+    createConfetti(Math.random() * canvas.width, Math.random() * 10, 120);
+  }
+});
+
+/* -------- INFO TOGGLE -------- */
+const infoBtn = document.getElementById("infoBtn");
+const infoBox = document.getElementById("infoBox");
+
+infoBtn.addEventListener("click", (e) => {
+  e.stopPropagation();
+  infoBox.style.display =
+    infoBox.style.display === "block" ? "none" : "block";
+});
+
+document.body.addEventListener("click", () => {
+  infoBox.style.display = "none";
+});
+
+window.addEventListener("resize", () => {
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+});
+
+let counter = 0;
+setInterval(() => {
+  if (color === 'rainbow') {
+    document.body.style.background =
+      `linear-gradient(${counter}deg, red, orange, yellow,green, blue, purple)`;
+  } else if (color && color2) {
+    document.body.style.background =
+      `linear-gradient(${counter}deg, #${color}, #${color2})`;
+  }
+  counter++;
+  if (counter > 365) counter = 0;
+}, 30);
+</script>
 
 </body>
 </html>
